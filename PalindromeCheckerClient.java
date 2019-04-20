@@ -1,0 +1,41 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.Socket;
+
+public class PalindromeCheckerClient {
+
+    Socket socket;
+    BufferedReader sock_in;
+    BufferedReader kdb_in;
+    PrintWriter sock_out;
+    String str;
+
+    public static void main(String arg[]) {
+        new PalindromeCheckerClient();
+    }
+
+    public PalindromeCheckerClient() {
+        boolean foo = true;
+        try{
+            socket = new Socket("127.0.0.1",8765);
+            kdb_in = new BufferedReader(new InputStreamReader(System.in));
+            sock_in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            sock_out = new PrintWriter(socket.getOutputStream());
+
+            //Begin the process and send to Server
+            while(foo) {
+                System.out.println("Enter the test phrase");
+                str = kdb_in.readLine();
+                sock_out.println(str);
+                sock_out.flush();
+                System.out.println("Message from PalindromeCheckerServer: ");
+                str = sock_in.readLine();
+                System.out.println(str);
+            }
+            socket.close();
+        }catch (Exception e) {
+
+        }
+    }
+}
